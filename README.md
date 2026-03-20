@@ -12,13 +12,16 @@ Built with React Native (Expo) and Claude AI (Anthropic).
 
 ## Running the App
 
-### What you need
+### Option A — Live demo link (no setup needed)
 
+If I've shared a live session link with you, just install **[Expo Go](https://apps.apple.com/app/expo-go/id982107779)** on your iPhone and scan the QR code. No API key or terminal required.
+
+### Option B — Run it yourself from source
+
+**What you need**
 - **[Expo Go](https://apps.apple.com/app/expo-go/id982107779)** on your iPhone
 - **Node.js v18+** — [nodejs.org](https://nodejs.org)
 - **An Anthropic API key** — [console.anthropic.com](https://console.anthropic.com) (free to create, takes 2 minutes)
-
-### Steps
 
 ```bash
 # 1. Clone the repo
@@ -33,7 +36,7 @@ cp .env.example .env
 # Open .env and paste your Anthropic API key
 
 # 4. Start the dev server
-npm start
+npx expo start --tunnel
 
 # 5. Scan the QR code with Expo Go on your iPhone
 ```
