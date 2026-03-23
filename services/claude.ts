@@ -12,14 +12,6 @@
  *   • Assistant prefilling: guarantees JSON output — no regex, no markdown fences
  *   • Retry w/ exponential backoff + jitter: handles 529 overload and transient errors
  *   • AbortController timeout: prevents hanging requests; per-task timeouts
- *
- * Note on beta features:
- *   Extended thinking and prompt caching are intentionally absent from this build.
- *   Both were implemented and removed — the interleaved-thinking and prompt-caching
- *   beta headers conflict when combined, causing API failures. At demo scale
- *   (single-session, 10–30 diary entries), neither feature provides measurable benefit.
- *   The architecture is ready to re-enable both in production (callClaude already
- *   filters thinking blocks; prompts are structured for easy cache_control re-addition).
  */
 
 import type { Recipe, MealLogEntry, InsightReport } from '../constants/mockData';
@@ -387,17 +379,6 @@ async function realGenerateRecipesStreaming(
   params: GenerateRecipesParams,
   onRecipe: (recipe: Recipe) => void
 ): Promise<void> {
-  /**
-   * Uses the Anthropic streaming API (stream: true → Server-Sent Events).
-   * Each SSE `content_block_delta` carries a text fragment. We accumulate
-   * fragments and run `extractCompleteRecipes` after every delta — so each
-   * recipe is delivered to the UI the moment its closing brace arrives,
-   * rather than waiting for all 5 to finish.
-   *
-   * NOTE: React Native's fetch polyfill does not support ReadableStream, so
-   * this function is not called in the current client. It works correctly in
-   * web/Node environments. A backend proxy would re-enable it for native.
-   */
   const { scannedIngredients, pantryItems, dietPreferences, healthGoals, seenRecipeTitles } = params;
   const allAvailable = [...new Set([...scannedIngredients, ...pantryItems])];
   const healthGuidance = buildHealthGuidance(healthGoals);
